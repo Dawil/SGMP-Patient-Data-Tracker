@@ -23,6 +23,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   cabal install --global --constraint='cabal > 1.18' --constraint='cabal-install > 1.18' cabal cabal-install
   SCRIPT
 
+  # user specific things
+  config.vm.provision "shell", inline: <<-SCRIPT
+  su vagrant
+  cd /vagrant
+  cabal sandbox init
+  SCRIPT
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
