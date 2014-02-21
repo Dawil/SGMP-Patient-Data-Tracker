@@ -20,7 +20,7 @@ executable SGMP-Patient-Data-Tracker
   main-is:             src/Main.hs
   -- other-modules:       
   -- other-extensions:    
-  build-depends:       base >=4.5 && <4.6,
+  build-depends:       base >=4.6 && <4.7,
                        scotty
   -- hs-source-dirs:      
   default-language:    Haskell2010
