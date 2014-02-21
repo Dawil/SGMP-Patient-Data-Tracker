@@ -24,3 +24,8 @@ executable SGMP-Patient-Data-Tracker
                        scotty
   -- hs-source-dirs:      
   default-language:    Haskell2010
+
+Test-Suite test-foo
+    type:       exitcode-stdio-1.0
+    main-is:    tests/Main.hs
+    build-depends: base
