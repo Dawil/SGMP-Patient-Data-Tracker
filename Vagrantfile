@@ -19,11 +19,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: <<-SCRIPT
   sudo apt-get update
   sudo apt-get install -y git haskell-platform
+  SCRIPT
+
+  # install user specific things
+  config.vm.provision "shell", inline: <<-SCRIPT
+  su vagrant
+  cd /vagrant
   cabal update
   cabal install --global --constraint='cabal > 1.18' --constraint='cabal-install > 1.18' cabal cabal-install
   SCRIPT
 
-  # user specific things
+  # run user specific things
   config.vm.provision "shell", inline: <<-SCRIPT
   su vagrant
   cd /vagrant
