@@ -1,8 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Web.Scotty
+import System.Environment (getArgs)
 
 main :: IO ()
-main = scotty 3000 $ do
-  get "/" $ do
-    html $ "Hello world!"
+main = do
+  args <- getArgs
+  print args
+  let port = case args of
+               [p] -> read p
+               _   -> 3000
+  scotty port $
+    get "/" $
+      html "Hello world!"
