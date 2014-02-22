@@ -17,14 +17,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-i386-vagrant-disk1.box"
 
   config.vm.provision "shell", inline: <<-SCRIPT
-  sudo apt-get update
-  sudo apt-get install -y git haskell-platform
+  # add heroku repository to apt
+  echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
+  # install heroku's release key for package verification
+  wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
+  apt-get update
+  apt-get install -y git haskell-platform heroku-toolbelt
   SCRIPT
 
   # install user specific things
   config.vm.provision "shell", inline: <<-SCRIPT
-  su vagrant
-  cd /vagrant
   cabal update
   cabal install --global --constraint='cabal > 1.18' --constraint='cabal-install > 1.18' cabal cabal-install
   SCRIPT
