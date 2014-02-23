@@ -17,12 +17,21 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 executable SGMP-Patient-Data-Tracker
-  main-is:             src/Main.hs
+  main-is:             Main.hs
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7,
+                       transformers,
+                       monad-logger,
+                       text,
+                       blaze-html,
+                       resourcet,
+                       persistent,
+                       persistent-template,
+                       esqueleto,
+                       persistent-sqlite,
                        scotty
-  -- hs-source-dirs:      
+  hs-source-dirs:      src
   default-language:    Haskell2010
 
 Test-Suite test-foo

@@ -9,3 +9,4 @@ cabal-dev
 .vagrant
 .cabal-sandbox
 cabal.sandbox.config
+db/*.sqlite3
