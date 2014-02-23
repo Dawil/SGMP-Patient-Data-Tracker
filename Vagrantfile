@@ -22,7 +22,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # install heroku's release key for package verification
   wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
   apt-get update
-  apt-get install -y git haskell-platform heroku-toolbelt
+  apt-get install -y git haskell-platform heroku-toolbelt binutils-gold
+
+  # Replace the linker with gold, it's faster
+  rm /usr/bin/ld
+  /usr/bin/ld < <<LINKER
+#!/bin/sh
+
+/usr/bin/ld.gold `echo "$*" | sed 's/--hash-size=\S*//' | sed 's/--reduce-memory-overheads//'`
+LINKER
   SCRIPT
 
   # install user specific things
