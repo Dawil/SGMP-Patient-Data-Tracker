@@ -19,18 +19,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: <<-SCRIPT
   # add heroku repository to apt
   echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
-  # install heroku's release key for package verification
+  ## install heroku's release key for package verification
   wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
   apt-get update
   apt-get install -y git haskell-platform heroku-toolbelt binutils-gold
+  SCRIPT
 
   # Replace the linker with gold, it's faster
-  rm /usr/bin/ld
-  /usr/bin/ld < <<LINKER
-#!/bin/sh
-
-/usr/bin/ld.gold `echo "$*" | sed 's/--hash-size=\S*//' | sed 's/--reduce-memory-overheads//'`
-LINKER
+  config.vm.provision "shell", inline: <<-SCRIPT
+  sudo rm -f /usr/bin/ld && sudo touch /usr/bin/ld
+  # need to filter out two flags which gold doesn't like
+  # at least until ghc 7.8 when linkers should be dynamically
+  # detected.
+  echo "#!/bin/sh" | sudo tee /usr/bin/ld > /dev/null
+  echo "/usr/bin/ld.gold \\\`echo "$*" | sed "s/--hash-size=\S*//" | sed "s/--reduce-memory-overheads//"\\\`" | sudo tee -a /usr/bin/ld > /dev/null
+  chmod +x /usr/bin/ld
   SCRIPT
 
   # install user specific things
