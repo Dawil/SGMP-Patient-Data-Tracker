@@ -22,7 +22,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ## install heroku's release key for package verification
   wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
   apt-get update
-  apt-get install -y git haskell-platform heroku-toolbelt binutils-gold
+  apt-get install -y git haskell-platform heroku-toolbelt postgresql postgresql-contrib postgresql-server-dev-all
+  SCRIPT
+
+  # postgres stuff
+  config.vm.provision "shell", inline: <<-SCRIPT
+  sudo -u postgres createuser --superuser $USER
+  sudo -u postgres psql -c "alter user $USER with password 'password';"
+  sudo -u postgres createdb $USER
   SCRIPT
 
   # install user specific things
