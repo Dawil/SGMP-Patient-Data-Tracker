@@ -8,7 +8,8 @@ import Control.Monad.Trans.Resource
 import Data.Text.Lazy
 
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigration, withSqliteConn)
+import Database.Persist.Sql
+import Database.Persist.Postgresql
 import Database.Persist.TH ( mkPersist
                            , mkMigrate
                            , persistLowerCase
@@ -21,6 +22,3 @@ Patient
   name  Text
   deriving Show
 |]
-
-runDB :: SqlPersistT (NoLoggingT (ResourceT IO)) a -> IO a
-runDB = runSqlite "db/dev.sqlite3"

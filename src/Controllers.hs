@@ -16,12 +16,17 @@ import Text.Blaze.Html.Renderer.Text
 
 import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Logger
+import Control.Monad.Trans.Resource
 
-import Database.Esqueleto as E (select, from, insert, Entity)
+import Database.Persist.Sql (runSqlPersistM)
+import Database.Esqueleto as E (select, from, insert, Entity, SqlPersistT)
 
 html' = S.html . renderHtml . docTypeHtml
 
-router = do
+router conn = do
+    let runDB :: SqlPersistT (NoLoggingT (ResourceT IO)) a -> IO a
+        runDB action = runSqlPersistM action conn
     get "/" $ do
       patients <- liftIO $ runDB $ E.select $
                                    from $ \p -> return p

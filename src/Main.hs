@@ -1,12 +1,16 @@
 module Main where
 
+import Control.Applicative ((<$>))
+
 import Models
 import Controllers
 
 import Web.Scotty as S
-import System.Environment (getArgs)
+import System.Environment (getArgs, getEnv)
 
-import Database.Persist.Sqlite (runSqlite, runMigration)
+import Data.ByteString.Char8 (pack)
+
+import Database.Persist.Postgresql
 
 main :: IO ()
 main = do
@@ -14,5 +18,7 @@ main = do
   let port = case args of
                [p] -> read p
                _   -> 3000
-  runDB $ runMigration migrateTables
-  scotty port router
+  connStr <- pack <$> getEnv "SGMP_CONN_STR"
+  withPostgresqlConn connStr $ \conn -> do
+    runSqlPersistM (runMigration migrateTables) conn
+    scotty port (router conn)

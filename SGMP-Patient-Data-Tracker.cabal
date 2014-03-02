@@ -22,6 +22,7 @@ executable SGMP-Patient-Data-Tracker
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7,
                        transformers,
+                       bytestring,
                        monad-logger,
                        text,
                        blaze-html,
@@ -29,7 +30,7 @@ executable SGMP-Patient-Data-Tracker
                        persistent,
                        persistent-template,
                        esqueleto,
-                       persistent-sqlite,
+                       persistent-postgresql,
                        scotty
   hs-source-dirs:      src
   default-language:    Haskell2010
